@@ -178,6 +178,22 @@ class Tree {
     };
     removeNode(value, now, now);
   }
+  find(value) {
+    function findNode(value, node) {
+      if (node === null) {
+        return null;
+      }
+      if (value === node.data) {
+        return node;
+      }
+
+      return value < node.data
+        ? findNode(value, node.left)
+        : findNode(value, node.right);
+    }
+
+    return findNode(value, this.root);
+  }
 }
 
 function replace(parent, node, newNode) {
@@ -212,6 +228,7 @@ function creatArray(n = 10, m = 5) {
 
 const newTestArray = creatArray(20, 20);
 const t1 = new Tree(testArray);
+// t1.prettyPrint();
 t1.prettyPrint();
-t1.prettyPrint();
+console.log(t1.find(117));
 // t1.delete(5);
