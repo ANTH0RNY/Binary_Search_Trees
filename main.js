@@ -1,6 +1,8 @@
 const mergeSort = require("./mergeSort");
 
-const testArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; // 10];
+const testArray = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+]; // 10];
 
 class Node {
   constructor(data) {
@@ -19,13 +21,10 @@ class Node {
 
 class Tree {
   constructor(arr) {
-    // this.array = arr;
     this.root = this.buildTree(arr);
-    // this.count = 0;
   }
   buildTree(Inputarr = [], isLeft = false) {
     const arr = removeDuplicate(mergeSort(Inputarr));
-    // console.log(arr);
     if (arr.length == 1) {
       return new Node(arr[0]);
     }
@@ -51,25 +50,14 @@ class Tree {
     node.right = this.buildTree(rightArray);
     return node;
   }
-  // prettyPrint() {
-  // const print = (node) => {
-  // if (node == null) {
-  // return;
-  // }
-  // print(node.left);
-  // print(node.right);
 
-  // process.stdout.write(`${node.data}, `);
-  // };
-  // print(this.root);
-  // process.stdout.write("\n");
-  // }
   prettyPrint() {
     const prettyPrint = (node, prefix = "", isLeft = true) => {
       if (node === null) {
         return;
       }
       if (node.right !== null) {
+        // console.log(node);
         prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
       }
       console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
@@ -79,20 +67,20 @@ class Tree {
     };
     prettyPrint(this.root);
   }
+
   insert(value) {
     let node = this.root;
     while (node != null) {
-      // console.log(value < node.data);
       if (value < node.data) {
-        console.log(node.data);
         if (node.left == null) {
           node.left = new Node(value);
+          return;
         }
         node = node.left;
       } else if (value > node.data) {
-        console.log(node.data);
         if (node.right == null) {
           node.right = new Node(value);
+          return;
         }
         node = node.right;
       } else {
@@ -100,6 +88,108 @@ class Tree {
       }
     }
   }
+
+  delete(value) {
+    let prev = null;
+    let now = this.root;
+    console.log("\n");
+    console.log(`Given value is ${value}`);
+    const removeNode = (value, now, prev) => {
+      if (now === null) {
+        return;
+      }
+      if (value == now.data) {
+        if (now.left === null && now.right === null) {
+          if (value < prev.data) {
+            prev.left = null;
+            this.prettyPrint();
+            return now;
+          }
+          if (value > prev.data) {
+            prev.right = null;
+            this.prettyPrint();
+            return now;
+          }
+        }
+        //if has one child
+        else if (now.left === null || now.left === null) {
+          if (now.left !== null) {
+            if (value < prev.data) {
+              prev.left = now.left;
+              return now;
+            }
+
+            prev.right = now.left;
+            return now;
+          }
+
+          if (value < prev.data) {
+            prev.left = now.right;
+            return now;
+          }
+
+          prev.right = now.right;
+          return now;
+        }
+        // if now has both children
+        else if (now.right !== null && now.left !== null) {
+          let current = now.right;
+          let past = now;
+          while (current.left !== null) {
+            past = current;
+            current = current.left;
+          }
+
+          if (current.left === null && current.right === null) {
+            if (past.data === now.data) {
+              current.left = now.left;
+              if (current.data < prev.data) {
+                prev.left = current;
+                return now;
+              }
+              prev.right = current;
+              return now;
+            }
+            replace(prev, now, current);
+            past.left = null;
+            return now;
+          }
+
+          if (now.data === past.data) {
+            current.left = now.left;
+            if (current.data < prev.data) {
+              prev.left = current;
+              return now;
+            }
+            prev.right = current;
+
+            return now;
+          }
+          past.left = current.right;
+          replace(prev, now, current);
+          return now;
+        }
+        return;
+      } else if (value < now.data) {
+        removeNode(value, now.left, now);
+      } else if (value > now.data) {
+        removeNode(value, now.right, now);
+      }
+    };
+    removeNode(value, now, now);
+  }
+}
+
+function replace(parent, node, newNode) {
+  newNode.left = node.left;
+  newNode.right = node.right;
+
+  if (newNode.data < parent.data) {
+    parent.left = newNode;
+    return node;
+  }
+  parent.right = newNode;
+  return node;
 }
 
 function removeDuplicate(arr = []) {
@@ -121,13 +211,7 @@ function creatArray(n = 10, m = 5) {
 }
 
 const newTestArray = creatArray(20, 20);
-// const n1 = new Node(1);
 const t1 = new Tree(testArray);
 t1.prettyPrint();
-t1.insert(11);
-t1.insert(10);
 t1.prettyPrint();
-// console.log(t1.root);
-// const res = t1.buildTree(newTestArray);
-// console.log(newTestArray);
-// console.log(res);
+// t1.delete(5);
