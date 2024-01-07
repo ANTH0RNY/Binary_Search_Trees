@@ -212,6 +212,52 @@ class Tree {
     if (callBack === undefined) return array;
     array.forEach(callBack);
   }
+  preOrder(callBack) {
+    const nodes = [];
+    const root = this.root;
+
+    function preoder(root) {
+      if (root === null) return;
+
+      nodes.push(root);
+      preoder(root.left);
+      preoder(root.right);
+    }
+    preoder(root);
+
+    if (callBack === undefined) return nodes;
+    nodes.forEach(callBack);
+  }
+
+  inOrder(callBack) {
+    const nodes = [];
+
+    function inorder(root) {
+      if (root === null) return;
+      inorder(root.left);
+      nodes.push(root);
+      inorder(root.right);
+    }
+    inorder(this.root);
+
+    if (callBack === undefined) return nodes;
+    nodes.forEach(callBack);
+  }
+
+  postOrder(callBack) {
+    const nodes = [];
+
+    function postorder(root) {
+      if (root === null) return;
+      postorder(root.left);
+      postorder(root.right);
+      nodes.push(root);
+    }
+    postorder(this.root);
+
+    if (callBack === undefined) return nodes;
+    nodes.forEach(callBack);
+  }
 }
 
 function replace(parent, node, newNode) {
@@ -246,5 +292,5 @@ function creatArray(n = 10, m = 5) {
 
 const newTestArray = creatArray(20, 20);
 const t1 = new Tree(testArray);
-// t1.prettyPrint();
-t1.levelOrder((node) => console.log(node.data));
+t1.prettyPrint();
+const testFunction = (node) => console.log(node.data);
