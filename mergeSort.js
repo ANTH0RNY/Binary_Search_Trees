@@ -38,5 +38,4 @@ function simpleMerge(arr1 = [], arr2 = []) {
   return arr;
 }
 
-// console.log(mergeSort([0, 5, 2, 3, 4, 1, 6, 101, 0, 10, 1]));
 module.exports = mergeSort;

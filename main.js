@@ -280,6 +280,24 @@ class Tree {
     const height = nodeDepth(this.root);
     return height == null ? 0 : height;
   }
+  isBalanced() {
+    const checkBalanced = (root) => {
+      if (root === null) {
+        return true;
+      }
+      const leftHeight = this.height(root.left);
+      const rightHeight = this.height(root.right);
+      if (Math.abs(leftHeight - rightHeight) > 1) return false;
+
+      return checkBalanced(root.left) && checkBalanced(root.right);
+    };
+    return checkBalanced(this.root);
+  }
+  reBalance() {
+    const newArray = this.inOrder().map((val) => val.data);
+    // console.log(newArray);
+    this.root = this.buildTree(newArray);
+  }
 }
 
 function replace(parent, node, newNode) {
@@ -304,17 +322,4 @@ function removeDuplicate(arr = []) {
   return newArray;
 }
 
-function creatArray(n = 10, m = 5) {
-  const newArray = [];
-  for (let i = 0; i < n; i++) {
-    newArray.push(Math.floor(Math.random() * m));
-  }
-  return newArray;
-}
-
-const newTestArray = creatArray(20, 20);
-const t1 = new Tree(testArray);
-t1.prettyPrint();
-const testFunction = (node) => console.log(node.data);
-
-console.log(t1.depth(t1.find(12)));
+module.exports = Tree;
