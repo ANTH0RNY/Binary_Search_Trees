@@ -258,6 +258,28 @@ class Tree {
     if (callBack === undefined) return nodes;
     nodes.forEach(callBack);
   }
+  height(node) {
+    if (node === null) return -1;
+    const leftHeight = this.height(node.left);
+    const rightHeight = this.height(node.right);
+
+    return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+  }
+  depth(node) {
+    function nodeDepth(root) {
+      // console.log(root.data);
+      if (root === null || node === null) return null;
+      if (node.data === root.data) {
+        return 0;
+      }
+      const height =
+        node.data > root.data ? nodeDepth(root.right) : nodeDepth(root.left);
+
+      return height === null ? null : height + 1;
+    }
+    const height = nodeDepth(this.root);
+    return height == null ? 0 : height;
+  }
 }
 
 function replace(parent, node, newNode) {
@@ -294,3 +316,5 @@ const newTestArray = creatArray(20, 20);
 const t1 = new Tree(testArray);
 t1.prettyPrint();
 const testFunction = (node) => console.log(node.data);
+
+console.log(t1.depth(t1.find(12)));
